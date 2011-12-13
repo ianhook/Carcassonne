@@ -1,0 +1,12 @@
+Tile Factory to create tile objects with specific functions for touch meeple placement and scoring.
+Tile should conatin only the image region information and the functions listed
+There should be a current tile which is the scatter.
+When the current tile is placed the image is moved onto the map and the Tile object saved in the Map data.  The scatter should be freed from a new image / Tile object
+
+make a board layout following the floatlayout
+
+
+Create a map layout that will allow users to interact with pieces of arbtary size and shape.
+
+There is a user and a map.  The user will have some interaction tool and the use that to interact with the map.  The map and interaction tool together should determine how the interaction is interpreted.  
+For carc: user has a piece that is put on the board. the board gives the 
