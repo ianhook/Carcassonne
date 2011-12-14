@@ -33,9 +33,9 @@ class CarcassonneApp(App):
 
 		#create players
 		CurrentTile.map = board
-		CurrentTile.size = TileFactory.size
+		CurrentTile.tile_size = TileFactory.size
 
-		playerTile = CurrentTile(grid=[1,1])
+		playerTile = CurrentTile()
 	
 		newTile = tile_fact.newTile(board)
 		root.add_widget(playerTile)

@@ -8,6 +8,7 @@ For games with real time events a clock function will need to be used to update 
 '''
 from kivy.uix.scatter import Scatter
 from kivy.properties import ListProperty
+from kivy.clock import Clock
 from kivy.logger import Logger
 
 class CurrentTile(Scatter):
@@ -17,12 +18,12 @@ class CurrentTile(Scatter):
 	def __init__(self, **kwargs):
 		Logger.info('hi')
 		kwargs.setdefault('do_scale', False)
+		print 'size'
+		print self.tile_size
+		kwargs.setdefault('size', self.tile_size)
 		super(CurrentTile, self).__init__(**kwargs)
-		self._set_to_grid(self.grid)
-
-	def on_grid(self, instance, value):
-		#Logger.info(value)
-		self._set_to_grid(value)
+		self.grid_trigger = Clock.create_trigger(self._set_to_grid)
+		self.bind(grid=self.grid_trigger)
 
 	def on_touch_up(self, touch):
 		super(CurrentTile, self).on_touch_up(touch) 
@@ -37,10 +38,10 @@ class CurrentTile(Scatter):
 			print (x,y,self.rotation)
 			(x,y) = self.map.to_widget(x,y)
 			print (x,y)
-			self.grid = (round(float(x) / 126.0), round(float(y) / 126.0))
-			print self.grid
+			print  round(float(x) / self.tile_size[0]), round(float(y) / self.tile_size[1])
+			self.grid = round(float(x) / self.tile_size[0]), round(float(y) / self.tile_size[1])
 			#this call is required if the value of self.grid does not change
-			self._set_to_grid(self.grid)
+			self.grid_trigger(self.grid)
 			self.rotation = rot + self.map.parent.rotation
 			#Logger.info('rotation: %f',self.rotation)
 			#Logger.info(self._get_center())
@@ -48,19 +49,13 @@ class CurrentTile(Scatter):
 
 		#Logger.info('touch_up')
 
-	def _set_to_grid(self, grid_location):
-		[x,y] = grid_location
-		self.pos = self.map.to_window(x*126,y*126)
-		print 'pos'
-		print self.pos
-		#self.rotation += self.map.rotation
-		#Logger.info('tile.pos:')
-		#Logger.info(self.pos)
+	def _set_to_grid(self, *largs):
+		[x,y] = self.grid
+		self.pos = self.map.to_window(x*self.tile_size[0],y*self.tile_size[1])
 
 	def resetTile(self, new_tile):
 		self.tile = new_tile
 		#update the tile image
 		self.add_widget(new_tile.get_image())
 		#move the widget to the next players position
-
 
